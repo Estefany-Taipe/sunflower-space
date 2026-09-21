@@ -1238,36 +1238,36 @@ document.addEventListener('visibilitychange', () => {
 });
 
 /* ---------- Control de la música de fondo (archivo) ---------- */
+let musicWanted = false;
+
 function unlockMusic() {
-  // Se llama con el primer clic: así el navegador permite reproducir después.
   if (!bgm) return;
   bgm.volume = 0;
-  bgm.play().then(() => { bgm.pause(); bgm.currentTime = 0; bgmOK = true; }).catch(() => { bgmOK = false; });
+  bgm.play().then(() => {
+    bgmOK = true;
+    // solo se pausa si aún no se ha pedido que suene la música
+    if (!musicWanted) { bgm.pause(); bgm.currentTime = 0; }
+  }).catch(() => { bgmOK = false; });
 }
+
 function startBackgroundMusic() {
   if (!bgm) return;
-
-  bgm.volume = MUSIC_VOLUME;
-
-  const p = bgm.play();
-
-  if (p && p.catch) {
-    p.then(() => {
-      bgmOK = true;
-      bgm.dataset.playing = '1';
-      console.log('🎵 musica.mp3 reproduciéndose');
-      Sound.duckAmbient();
-    }).catch((err) => {
-      bgmOK = false;
-      console.warn('🔇 No se pudo reproducir musica.mp3:', err);
-    });
-  } else {
+  musicWanted = true;
+  gsap.killTweensOf(bgm);
+  bgm.volume = 0;
+  bgm.play().then(() => {
     bgmOK = true;
     bgm.dataset.playing = '1';
     Sound.duckAmbient();
-  }
+    gsap.to(bgm, { volume: MUSIC_VOLUME, duration: MUSIC_FADE, ease: 'none' }); // fade-in
+  }).catch((err) => {
+    bgmOK = false;
+    console.warn('🔇 No se pudo reproducir musica.mp3:', err);
+  });
 }
+
 function stopBackgroundMusic() {
+  musicWanted = false;
   Sound.stopMusic();
   if (!bgm) return;
   bgm.dataset.playing = '0';
