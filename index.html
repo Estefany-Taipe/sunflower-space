@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Para ti, un girasol entre las estrellas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#04050d">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+/* ==========================================================
+   TOKENS — negro espacial, azul noche, violeta, dorado, girasol
+   La experiencia es oscura por diseño: no cambia con el tema.
+   ========================================================== */
+:root{
+  --void:#04050d;
+  --night:#0a0e2a;
+  --violet:#5a45a6;
+  --gold:#f3c76a;
+  --sun:#ffd54f;
+  --amber:#e8902e;
+  --cream:#fff3d4;
+  --serif:'Cormorant Garamond','Iowan Old Style','Palatino Linotype',Georgia,serif;
+  --sans:'Jost',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  color-scheme:dark;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{height:100%;background:var(--void);scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0;height:100%;overflow:hidden;background:var(--void);color:var(--cream);
+  font-family:var(--serif);-webkit-font-smoothing:antialiased;
+  touch-action:none;-webkit-user-select:none;user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+#gl{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+#gl.pointer{cursor:pointer}
+
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- Velos para dar legibilidad al texto ---------- */
+.veil{position:fixed;inset:0;pointer-events:none;opacity:0}
+#veil-center{background:radial-gradient(ellipse 70% 55% at 50% 50%,rgba(3,4,12,.82),rgba(3,4,12,.35) 70%,transparent 100%)}
+#veil-bottom{background:linear-gradient(to top,rgba(3,4,12,.85),rgba(3,4,12,.0) 48%)}
+
+/* ==========================================================
+   ESCENA 1 — la tarjeta
+   ========================================================== */
+#card-wrap{
+  position:fixed;inset:0;display:grid;place-items:center;padding:1.5rem;
+  pointer-events:none;perspective:900px;z-index:5;
+}
+.enter{opacity:0}
+.enter.in{animation:cardIn 2s .5s cubic-bezier(.16,.8,.24,1) forwards}
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(18px) scale(.94);filter:blur(8px)}
+  to{opacity:1;transform:none;filter:blur(0)}
+}
+.card{
+  position:relative;pointer-events:auto;cursor:pointer;overflow:hidden;
+  width:min(86vw,430px);border-radius:26px;
+  background:
+    radial-gradient(120% 90% at 50% 0%,rgba(90,69,166,.24),transparent 62%),
+    linear-gradient(165deg,rgba(16,20,52,.62),rgba(6,7,20,.80));
+  border:1px solid rgba(243,199,106,.30);
+  box-shadow:0 0 0 1px rgba(255,255,255,.03) inset,0 30px 80px rgba(0,0,10,.6),0 0 70px rgba(243,199,106,.12);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(var(--ty,0px));
+  transition:transform .55s cubic-bezier(.2,.8,.2,1),box-shadow .5s,border-color .5s;
+}
+.card:hover{
+  border-color:rgba(243,199,106,.55);
+  box-shadow:0 0 0 1px rgba(255,255,255,.04) inset,0 40px 90px rgba(0,0,10,.65),0 0 100px rgba(243,199,106,.22);
+}
+.card:focus-visible{outline:2px solid var(--gold);outline-offset:6px}
+/* Brillo que barre la tarjeta */
+.card::before{
+  content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;mix-blend-mode:screen;
+  background:linear-gradient(115deg,transparent 38%,rgba(255,226,150,.20) 50%,transparent 62%);
+  background-size:260% 100%;background-position:150% 0;
+  animation:sheen 6s 2.4s ease-in-out infinite;
+}
+@keyframes sheen{0%{background-position:150% 0}50%,100%{background-position:-50% 0}}
+/* Latido de luz en el borde */
+.card::after{
+  content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  box-shadow:inset 0 0 46px rgba(243,199,106,.10);
+  animation:breathe 4.5s ease-in-out infinite;
+}
+@keyframes breathe{0%,100%{opacity:.35}50%{opacity:1}}
+.float{padding:2.9rem 2.2rem 2.5rem;text-align:center;animation:float 6.5s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.card-text{
+  margin:0 0 2rem;font-size:clamp(1.75rem,5.6vw,2.3rem);font-style:italic;font-weight:500;line-height:1.2;
+  color:var(--cream);text-wrap:balance;text-shadow:0 0 26px rgba(243,199,106,.38);
+}
+
+.btn{
+  font-family:var(--sans);font-weight:300;font-size:1.02rem;letter-spacing:.04em;color:var(--cream);
+  background:linear-gradient(180deg,rgba(243,199,106,.18),rgba(232,144,46,.10));
+  border:1px solid rgba(243,199,106,.55);border-radius:999px;padding:.85rem 1.95rem;cursor:pointer;
+  box-shadow:0 0 22px rgba(243,199,106,.18);
+  transition:background .35s,box-shadow .35s,transform .35s;
+}
+.btn:hover{background:rgba(243,199,106,.27);box-shadow:0 0 40px rgba(243,199,106,.40);transform:translateY(-1px)}
+.btn:active{transform:scale(.97)}
+.btn:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+
+/* ==========================================================
+   MENSAJE (letra por letra) y ESCENA FINAL
+   ========================================================== */
+#message{
+  position:fixed;inset:0;display:grid;place-items:center;padding:2rem;opacity:0;pointer-events:none;z-index:4;
+}
+#msg-text{
+  margin:0;max-width:24em;text-align:center;font-style:italic;font-weight:500;
+  font-size:clamp(1.45rem,3.9vw,2.6rem);line-height:1.5;text-wrap:balance;
+  text-shadow:0 0 30px rgba(0,0,0,.95),0 0 16px rgba(243,199,106,.35);
+}
+.ghost{opacity:0}
+.caret{display:inline-block;width:0;position:relative}
+.caret::after{content:"";position:absolute;left:1px;top:.18em;width:2px;height:1em;background:var(--gold);animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+
+#final{
+  position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  padding:2rem 1.5rem calc(2.6rem + env(safe-area-inset-bottom,0px));pointer-events:none;z-index:4;
+}
+#final-text{
+  margin:0;text-align:center;font-weight:500;font-style:italic;
+  font-size:clamp(2rem,6.4vw,4rem);line-height:1.15;text-wrap:balance;opacity:0;
+  color:var(--cream);text-shadow:0 0 34px rgba(243,199,106,.55),0 0 8px rgba(0,0,0,.6);
+}
+#restart{margin-top:1.7rem;opacity:0;pointer-events:none}
+
+#hint{
+  position:fixed;left:0;right:0;bottom:calc(1.3rem + env(safe-area-inset-bottom,0px));margin:0;text-align:center;
+  font-family:var(--sans);font-weight:300;font-size:.86rem;letter-spacing:.02em;color:rgba(255,243,212,.6);
+  opacity:0;pointer-events:none;padding:0 1.5rem;z-index:3;
+}
+
+/* ---------- Sonido ---------- */
+#sound{
+  position:fixed;top:calc(14px + env(safe-area-inset-top,0px));right:14px;width:44px;height:44px;border-radius:50%;
+  display:grid;place-items:center;cursor:pointer;z-index:9;opacity:0;pointer-events:none;
+  background:rgba(10,12,30,.45);border:1px solid rgba(243,199,106,.32);color:var(--gold);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:opacity 1s,background .3s,box-shadow .3s;
+}
+#sound.show{opacity:1;pointer-events:auto}
+#sound:hover{background:rgba(243,199,106,.16);box-shadow:0 0 22px rgba(243,199,106,.25)}
+#sound:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+#sound svg{width:20px;height:20px}
+#sound .slash{opacity:0;transition:opacity .2s}
+#sound.off .slash{opacity:1}
+#sound.off .waves{opacity:.25}
+
+/* Cortina negra para reiniciar */
+#curtain{position:fixed;inset:0;background:var(--void);opacity:0;pointer-events:none;transition:opacity .9s ease;z-index:20}
+
+#nogl{position:fixed;inset:0;display:none;place-items:center;padding:2rem;text-align:center;font-size:1.4rem;font-style:italic;z-index:30;background:var(--void)}
+
+@media (prefers-reduced-motion:reduce){
+  .float,.card::before,.card::after{animation:none}
+}
+</style>
+</head>
+
+<body>
+<canvas id="gl" aria-label="Un girasol hecho de estrellas flotando en el espacio"></canvas>
+<div class="veil" id="veil-center"></div>
+<div class="veil" id="veil-bottom"></div>
+
+<!-- ESCENA 1 -->
+<div id="card-wrap">
+  <div class="enter in" id="enter">
+    <div class="card" id="card" role="button" tabindex="0" aria-label="Hay algo que quiero mostrarte. Pulsa para descubrir">
+      <div class="float">
+        <p class="card-text">Hay algo que quiero mostrarte... ✨</p>
+        <button class="btn" id="start" type="button">Descubrir 🌻</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mensaje -->
+<div id="message"><p id="msg-text" aria-hidden="true"></p></div>
+<p class="sr-only" id="sr" aria-live="polite"></p>
+
+<!-- Final -->
+<div id="final">
+  <p id="final-text">Feliz Día de las Flores Amarillas 🌻✨</p>
+  <button class="btn" id="restart" type="button">Volver a comenzar</button>
+</div>
+
+<p id="hint"></p>
+
+<button id="sound" type="button" aria-label="Silenciar sonido" aria-pressed="false">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4z"/>
+    <g class="waves"><path d="M15.5 9a4.2 4.2 0 0 1 0 6"/><path d="M18 6.5a8 8 0 0 1 0 11"/></g>
+    <path class="slash" d="M4 4l16 16"/>
+  </svg>
+</button>
+
+<div id="curtain"></div>
+<div id="nogl">No se pudo iniciar la experiencia 3D en este navegador.<br>Prueba con Chrome, Edge, Safari o Firefox actualizados.</div>
+
+<!-- ============================================================
+     MÚSICA DE FONDO
+     Pon aquí tu archivo. Debe estar en la misma carpeta que este
+     HTML (o usa "audio/musica.mp3" si lo guardas en una subcarpeta).
+     Si el archivo no existe, suena la pista electro sintetizada.
+     ============================================================ -->
+<audio id="bgm" src="./audio/musica.mp3" loop preload="auto"></audio>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+(() => {
+'use strict';
+
+/* ============================================================
+   0. UTILIDADES Y CONFIGURACIÓN
+   ============================================================ */
+const $ = (s) => document.querySelector(s);
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, t) => a + (b - a) * t;
+const rand = (a = 0, b = 1) => a + Math.random() * (b - a);
+const gauss = () => { let u = 0, v = 0; while (!u) u = Math.random(); while (!v) v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
+const sstep = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+const mix3 = (a, b, t) => [lerp(a[0], b[0], t), lerp(a[1], b[1], t), lerp(a[2], b[2], t)];
+
+const failGL = () => { $('#nogl').style.display = 'grid'; };
+if (typeof THREE === 'undefined' || typeof gsap === 'undefined') { failGL(); return; }
+
+const isMobile = matchMedia('(pointer: coarse)').matches || Math.min(innerWidth, innerHeight) < 600;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* AJUSTE 4 — más partículas en móvil para que los pétalos no queden ralos */
+const Q = isMobile ? 0.78 : 1;                       // factor de calidad (cantidad de partículas)
+const WARP = reduceMotion ? { fov: 68, streak: 0.35, roll: 0 } : { fov: 92, streak: 1, roll: 0.05 };
+
+const canvas = $('#gl');
+
+/* ---------- MÚSICA DE FONDO: ajustes rápidos ---------- */
+const bgm = $('#bgm');
+const MUSIC_VOLUME = 0.18;   // volumen final (0 = nada, 1 = máximo). Bajito = 0.15–0.22
+const MUSIC_START  = 0;   // segundo de la animación en que entra la música
+const MUSIC_FADE   = 5;      // segundos que tarda en subir el volumen
+let bgmOK = false;           // true si el archivo se pudo cargar y reproducir
+
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, powerPreference: 'high-performance' });
+} catch (err) { failGL(); return; }
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2));
+renderer.setClearColor(0x04050d, 1);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 2000);
+
+/* Uniformos compartidos por todos los sistemas de partículas */
+const U = {
+  uTime: { value: 0 },
+  uScale: { value: 800 },            // píxeles por unidad a distancia 1 (para el tamaño de puntos)
+  uPR: { value: renderer.getPixelRatio() },
+  uSizeMul: { value: isMobile ? 1.25 : 1 },
+  uRayO: { value: new THREE.Vector3() },   // rayo del puntero (origen)
+  uRayD: { value: new THREE.Vector3(0, 0, -1) }, // rayo del puntero (dirección)
+  uRepel: { value: 0 },
+  uSpeed: { value: 0 },              // velocidad del viaje espacial
+  uStreak: { value: 0 },             // longitud de las estelas
+  uTravel: { value: 0 },             // distancia recorrida
+  uGold: { value: 0 },               // 0 = azul/violeta, 1 = dorado
+  uNeb: { value: 0.55 },             // intensidad de la nebulosa
+  uFlow: { value: 0 },
+  uSparkle: { value: 0 },
+  uPulseT: { value: 99 },            // onda expansiva al hacer clic en el girasol
+};
+const shared = { uTime: U.uTime, uScale: U.uScale, uSizeMul: U.uSizeMul, uRayO: U.uRayO, uRayD: U.uRayD, uRepel: U.uRepel };
+
+const makeMat = (vs, fs, uniforms, extra) => new THREE.ShaderMaterial(Object.assign({
+  vertexShader: vs, fragmentShader: fs, uniforms,
+  transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending,
+}, extra || {}));
+
+/* ============================================================
+   1. SHADERS
+   ============================================================ */
+
+/* Fragmento común: punto luminoso con núcleo y halo suave (glow) */
+const FS_GLOW = `
+varying vec3 vColor; varying float vAlpha;
+void main(){
+  vec2 c = gl_PointCoord - 0.5;
+  float d = length(c) * 2.0;
+  if (d > 1.0) discard;
+  float core = exp(-d * d * 10.0);
+  float halo = pow(1.0 - d, 2.4) * 0.5;
+  float a = (core + halo) * vAlpha;
+  gl_FragColor = vec4(vColor * (0.7 + 0.9 * core), a);
+}`;
+
+/* Partículas con "morph": van de una nube dispersa (position) a su destino (aTarget).
+   Se usa para el girasol y para el corazón.
+   aP1 = (tamaño, retraso, semilla, tipo)   tipo: 0 núcleo, 1 pétalo, 2 halo, 3 corazón
+   aP2 = (revelado, escape, giro, alfa)                                            */
+const VS_MORPH = `
+uniform float uTime, uScale, uSizeMul, uRepel, uPulseT;
+uniform float uForm, uReveal, uOpen, uFade, uDim, uOut, uSpan, uBright;
+uniform vec3 uRayO, uRayD, uDust;
+attribute vec3 aTarget; attribute vec3 aColor; attribute vec4 aP1; attribute vec4 aP2;
+varying vec3 vColor; varying float vAlpha;
+
+float easeIO(float x){ return x < 0.5 ? 4.0*x*x*x : 1.0 - pow(-2.0*x + 2.0, 3.0) * 0.5; }
+vec3 rotZ(vec3 p, float a){ float c = cos(a), s = sin(a); return vec3(c*p.x - s*p.y, s*p.x + c*p.y, p.z); }
+
+void main(){
+  float size = aP1.x, delay = aP1.y, seed = aP1.z, type = aP1.w;
+  float reveal = aP2.x, esc = aP2.y, swirl = aP2.z, baseA = aP2.w;
+
+  // progreso individual de esta partícula (cada una sale en su momento)
+  float t = clamp((uForm - delay) / uSpan, 0.0, 1.0);
+  float e = easeIO(t);
+
+  // destino; los pétalos empiezan como capullo y se abren con uOpen
+  vec3 tgt = aTarget;
+  if (type > 0.5 && type < 1.5) {
+    float r = length(tgt.xy);
+    float bud = 1.0 - uOpen;
+    tgt.xy *= mix(1.0, 0.62, bud);
+    tgt.z += bud * max(r - 1.4, 0.0) * 0.85;
+  }
+
+  // trayecto: mezcla lineal + remolino que se deshace al llegar
+  vec3 p = mix(position, tgt, e);
+  p = rotZ(p, (1.0 - e) * swirl);
+
+  // deriva flotante mientras es polvo
+  p += (1.0 - e) * 0.45 * vec3(sin(uTime*0.5 + seed*40.0), cos(uTime*0.43 + seed*27.0), sin(uTime*0.37 + seed*13.0));
+
+  // movimiento suave una vez formado (ondulación de pétalos + temblor)
+  float ang = atan(tgt.y, tgt.x);
+  float rr = length(tgt.xy);
+  if (type > 0.5 && type < 1.5) p.z += e * 0.10 * sin(uTime*0.9 + rr*1.2 + ang*2.0);
+  p += e * 0.025 * vec3(sin(uTime*1.3 + seed*61.0), cos(uTime*1.1 + seed*47.0), sin(uTime*1.7 + seed*29.0));
+
+  // partículas que se escapan del girasol y regresan
+  if (esc > 0.0) {
+    float ph = fract(uTime * (0.035 + seed*0.05) + seed*7.0);
+    float ex = sin(3.14159 * ph); ex = ex * ex;
+    vec3 dir = normalize(tgt + vec3(0.0, 0.0, 0.4) + vec3(sin(seed*91.0), cos(seed*57.0), sin(seed*33.0)) * 0.6);
+    p += dir * ex * esc * e;
+  }
+
+  // disolución hacia afuera (corazón)
+  p += normalize(p + vec3(0.0001)) * uOut * 4.0 * (0.5 + seed);
+
+  vec3 wp = (modelMatrix * vec4(p, 1.0)).xyz;
+
+  // onda expansiva al hacer clic
+  float pr = length(wp);
+  float q = (pr - uPulseT * 10.0) * 0.7;
+  float w = exp(-q*q) * exp(-uPulseT * 0.8);
+  wp += normalize(wp + vec3(0.0001)) * w * 1.6;
+
+  // el puntero aparta suavemente las partículas (distancia al rayo del mouse)
+  vec3 rel = wp - uRayO;
+  float tt = max(dot(rel, uRayD), 0.5);
+  vec3 dv = rel - uRayD * tt;
+  float R = 0.11 * tt;
+  float f = 1.0 - smoothstep(0.0, R, length(dv));
+  wp += normalize(dv + vec3(0.0001)) * f * f * R * 0.9 * uRepel;
+
+  vec4 mv = viewMatrix * vec4(wp, 1.0);
+  gl_Position = projectionMatrix * mv;
+
+  float trans = sin(3.14159 * t);   // 0 al inicio/fin, 1 a mitad del viaje
+  float sz = size * (1.0 + 0.7*trans) * (1.0 + w*1.5);
+  gl_PointSize = clamp(sz * uSizeMul * uScale / max(-mv.z, 0.1), 1.0, 70.0);
+
+  float rv = smoothstep(reveal, reveal + 0.12, uReveal);
+  float tw = 0.86 + 0.14 * sin(uTime * (1.5 + seed*2.0) + seed*60.0);
+  vAlpha = baseA * rv * uFade * uDim * tw * (1.0 + trans*0.6 + w*1.2) * uBright;
+
+  vec3 col = mix(uDust, aColor, smoothstep(0.0, 0.85, e));
+  col += vec3(1.0, 0.82, 0.45) * trans * 0.35 + vec3(1.0, 0.9, 0.6) * w * 0.6;
+  vColor = col;
+}`;
+
+/* Polvo estelar flotante (reacciona al mouse) */
+const VS_DUST = `
+uniform float uTime, uScale, uSizeMul, uRepel;
+uniform vec3 uRayO, uRayD;
+attribute vec3 aColor; attribute vec4 aD;   // tamaño, semilla, velocidad, alfa
+varying vec3 vColor; varying float vAlpha;
+void main(){
+  float s = aD.y;
+  vec3 p = position + vec3(sin(uTime*0.13*aD.z + s*40.0), cos(uTime*0.11*aD.z + s*23.0), sin(uTime*0.09*aD.z + s*11.0)) * 2.2;
+  vec3 rel = p - uRayO;
+  float tt = max(dot(rel, uRayD), 0.5);
+  vec3 dv = rel - uRayD * tt;
+  float R = 0.10 * tt;
+  float f = 1.0 - smoothstep(0.0, R, length(dv));
+  p += normalize(dv + vec3(0.0001)) * f * f * R * 1.1 * uRepel;
+  vec4 mv = viewMatrix * vec4(p, 1.0);
+  gl_Position = projectionMatrix * mv;
+  gl_PointSize = clamp(aD.x * uSizeMul * uScale / max(-mv.z, 0.5), 1.0, 40.0);
+  vAlpha = aD.w * (0.55 + 0.45 * sin(uTime * (0.8 + aD.z) + s * 80.0));
+  vColor = aColor;
+}`;
+
+/* Estrellas de fondo (esfera infinita) */
+const VS_STARS = `
+uniform float uTime, uPR;
+attribute vec3 aColor; attribute vec3 aD;   // tamaño(px), semilla, alfa
+varying vec3 vColor; varying float vAlpha;
+void main(){
+  vec4 mv = modelViewMatrix * vec4(position, 1.0);
+  gl_Position = projectionMatrix * mv;
+  float tw = 0.65 + 0.35 * sin(uTime * (0.5 + aD.y*1.8) + aD.y * 100.0);
+  gl_PointSize = aD.x * uPR * (0.85 + 0.3*tw);
+  vAlpha = aD.z * tw;
+  vColor = aColor;
+}`;
+
+/* Túnel de estrellas para el viaje (puntos + estelas) */
+const VS_TUNNEL = `
+uniform float uTravel, uStreak, uSpeed, uScale, uAlphaMul;
+attribute vec3 aColor; attribute vec3 aD;   // semilla, tamaño, extremo (0 cabeza, 1 cola)
+varying vec3 vColor; varying float vAlpha;
+const float D = 260.0;
+void main(){
+  float z = mod(position.z + uTravel, D) - D;       // avanza hacia la cámara y reaparece al fondo
+  float streak = uStreak * (6.0 + 70.0 * uSpeed) * aD.z;
+  vec4 mv = modelViewMatrix * vec4(position.x, position.y, z - streak, 1.0);
+  gl_Position = projectionMatrix * mv;
+  gl_PointSize = clamp(aD.y * uScale / max(-mv.z, 0.5), 1.0, 7.0);
+  float depthFade = smoothstep(D, D * 0.7, -z) * smoothstep(0.0, 6.0, -z);
+  float vis = smoothstep(0.0, 0.12, uSpeed);
+  vAlpha = depthFade * vis * (1.0 - aD.z) * uAlphaMul;
+  vColor = aColor;
+}`;
+
+/* Nebulosas: fondo procedural en una esfera enorme */
+const VS_NEB = `varying vec3 vDir; void main(){ vDir = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`;
+const FS_NEB = `
+varying vec3 vDir;
+uniform float uTime, uFlow, uNeb, uGold;
+float hash(vec3 p){ p = fract(p * 0.3183099 + 0.1); p *= 17.0; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
+float noise(vec3 x){
+  vec3 i = floor(x); vec3 f = fract(x); f = f*f*(3.0 - 2.0*f);
+  return mix(mix(mix(hash(i+vec3(0,0,0)), hash(i+vec3(1,0,0)), f.x), mix(hash(i+vec3(0,1,0)), hash(i+vec3(1,1,0)), f.x), f.y),
+             mix(mix(hash(i+vec3(0,0,1)), hash(i+vec3(1,0,1)), f.x), mix(hash(i+vec3(0,1,1)), hash(i+vec3(1,1,1)), f.x), f.y), f.z);
+}
+float fbm(vec3 p){ float a = 0.5, s = 0.0; for (int i = 0; i < 5; i++){ s += a * noise(p); p = p * 2.03 + vec3(1.7, 9.2, 3.1); a *= 0.5; } return s; }
+void main(){
+  vec3 d = normalize(vDir);
+  float n1 = fbm(d * 1.6 + vec3(0.0, uTime * 0.004, uFlow));
+  float n2 = fbm(d * 2.6 + 5.0 + vec3(uTime * 0.006, 0.0, -uFlow * 0.6) + n1 * 0.8);
+  float n3 = fbm(d * 4.2 - 3.0 + vec3(0.0, uTime * 0.005, uFlow * 1.3));
+  float m1 = smoothstep(0.42, 0.85, n1);
+  float m2 = smoothstep(0.45, 0.85, n2);
+  float m3 = smoothstep(0.50, 0.90, n3);
+  vec3 blue = vec3(0.08, 0.16, 0.42);
+  vec3 violet = vec3(0.30, 0.16, 0.50);
+  vec3 gold = vec3(0.75, 0.50, 0.14);
+  // AJUSTE 2 — el dorado del fondo se contiene para no competir con los pétalos
+  vec3 col = blue * m1 + violet * m2 * 0.9 + gold * m3 * (0.12 + 0.30 * uGold);
+  // transición de oscuros a dorados (más discreta)
+  col = mix(col, col * vec3(1.20, 1.0, 0.70) + gold * 0.03 * uGold * (m1 + m2), uGold * 0.28);
+  col += vec3(0.008, 0.010, 0.026);
+  gl_FragColor = vec4(col * uNeb, 1.0);
+}`;
+
+/* Destellos en forma de estrella de cuatro puntas alrededor del girasol */
+const VS_SPARK = `
+uniform float uTime, uScale, uSizeMul, uSparkle;
+attribute vec4 aD;   // tamaño, fase, velocidad, semilla
+varying float vAlpha;
+void main(){
+  float tw = pow(max(0.0, sin(uTime * aD.z + aD.y)), 5.0);
+  vec3 p = position + vec3(sin(uTime*0.3 + aD.y*5.0), cos(uTime*0.27 + aD.y*3.0), 0.0) * 0.3;
+  vec4 mv = modelViewMatrix * vec4(p, 1.0);
+  gl_Position = projectionMatrix * mv;
+  gl_PointSize = clamp(aD.x * (0.3 + 0.7*tw) * uScale * uSizeMul / max(-mv.z, 0.5), 0.0, 64.0);
+  vAlpha = tw * uSparkle;
+}`;
+const FS_SPARK = `
+varying float vAlpha;
+void main(){
+  vec2 c = gl_PointCoord - 0.5;
+  float d = length(c) * 2.0;
+  float star = max(exp(-abs(c.x)*70.0) * exp(-abs(c.y)*6.0), exp(-abs(c.y)*70.0) * exp(-abs(c.x)*6.0));
+  float core = exp(-d*d*14.0);
+  float a = (star * 0.9 + core) * vAlpha;
+  gl_FragColor = vec4(vec3(1.0, 0.92, 0.65), a);
+}`;
+
+/* Partículas dinámicas: estela del cursor y explosión al hacer clic */
+const VS_POOL = `
+uniform float uScale;
+attribute vec3 aColor; attribute vec2 aD;  // tamaño, alfa
+varying vec3 vColor; varying float vAlpha;
+void main(){
+  vec4 mv = modelViewMatrix * vec4(position, 1.0);
+  gl_Position = projectionMatrix * mv;
+  gl_PointSize = clamp(aD.x * uScale / max(-mv.z, 0.5), 0.0, 48.0);
+  vColor = aColor; vAlpha = aD.y;
+}`;
+
+/* Estrella fugaz */
+const VS_SHOOT = `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`;
+const FS_SHOOT = `
+varying vec2 vUv; uniform float uOp;
+void main(){
+  float along = vUv.x;
+  float across = 1.0 - abs(vUv.y - 0.5) * 2.0;
+  float a = pow(along, 3.0) * pow(across, 1.5);
+  float head = smoothstep(0.93, 1.0, along) * across;
+  gl_FragColor = vec4(vec3(1.0, 0.93, 0.75) * (a + head * 1.5), (a + head) * uOp);
+}`;
+
+/* ============================================================
+   2. ELEMENTOS DE LA ESCENA
+   ============================================================ */
+
+/* --- 2.1 Nebulosa de fondo --- */
+const nebula = new THREE.Mesh(
+  new THREE.SphereGeometry(600, 32, 16),
+  makeMat(VS_NEB, FS_NEB, { uTime: U.uTime, uFlow: U.uFlow, uNeb: U.uNeb, uGold: U.uGold },
+    { side: THREE.BackSide, blending: THREE.NoBlending, transparent: false })
+);
+nebula.renderOrder = -10; nebula.frustumCulled = false;
+scene.add(nebula);
+
+/* --- 2.2 Estrellas de fondo (sutiles) --- */
+function starColor() {
+  const r = Math.random();
+  if (r < 0.62) return [0.78, 0.86, 1.0];
+  if (r < 0.82) return [1.0, 0.93, 0.78];
+  return [0.86, 0.78, 1.0];
+}
+const stars = (() => {
+  const n = Math.floor(3400 * Q);
+  const pos = new Float32Array(n * 3), col = new Float32Array(n * 3), d = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) {
+    const rad = rand(200, 300), th = rand(0, Math.PI * 2), ph = Math.acos(rand(-1, 1));
+    pos.set([rad * Math.sin(ph) * Math.cos(th), rad * Math.cos(ph), rad * Math.sin(ph) * Math.sin(th)], i * 3);
+    col.set(starColor(), i * 3);
+    d.set([rand(1.0, 3.0) * (Math.random() < 0.04 ? 1.6 : 1), Math.random(), rand(0.25, 0.8)], i * 3);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  g.setAttribute('aColor', new THREE.BufferAttribute(col, 3));
+  g.setAttribute('aD', new THREE.BufferAttribute(d, 3));
+  const p = new THREE.Points(g, makeMat(VS_STARS, FS_GLOW, { uTime: U.uTime, uPR: U.uPR }));
+  p.renderOrder = -5; p.frustumCulled = false;
+  return p;
+})();
+scene.add(stars);
+
+/* --- 2.3 Polvo estelar / partículas flotantes --- */
+const dust = (() => {
+  const n = Math.floor(850 * Q);
+  const pos = new Float32Array(n * 3), col = new Float32Array(n * 3), d = new Float32Array(n * 4);
+  for (let i = 0; i < n; i++) {
+    const ang = rand(0, Math.PI * 2), rad = rand(7, 62);
+    pos.set([Math.cos(ang) * rad, rand(-28, 28), Math.sin(ang) * rad], i * 3);
+    const r = Math.random();
+    col.set(r < 0.6 ? [1.0, 0.80, 0.45] : r < 0.85 ? [0.75, 0.85, 1.0] : [0.80, 0.72, 1.0], i * 3);
+    d.set([rand(0.09, 0.30), Math.random(), rand(0.4, 1.4), rand(0.18, 0.55)], i * 4);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  g.setAttribute('aColor', new THREE.BufferAttribute(col, 3));
+  g.setAttribute('aD', new THREE.BufferAttribute(d, 4));
+  const p = new THREE.Points(g, makeMat(VS_DUST, FS_GLOW, Object.assign({}, shared)));
+  p.renderOrder = 0; p.frustumCulled = false;
+  return p;
+})();
+scene.add(dust);
+
+/* --- 2.4 Túnel de viaje: puntos + estelas --- */
+const tunnelU = { uTravel: U.uTravel, uStreak: U.uStreak, uSpeed: U.uSpeed, uScale: U.uScale, uAlphaMul: { value: 1 } };
+const tunnelLineU = Object.assign({}, tunnelU, { uAlphaMul: { value: 1.4 } });
+const tunnel = new THREE.Group();
+(() => {
+  const n = Math.floor(2400 * Q);
+  const P = new Float32Array(n * 3), C = new Float32Array(n * 3), D0 = new Float32Array(n * 3);
+  const LP = new Float32Array(n * 6), LC = new Float32Array(n * 6), LD = new Float32Array(n * 6);
+  for (let i = 0; i < n; i++) {
+    const ang = rand(0, Math.PI * 2), rad = 1.6 + Math.pow(Math.random(), 0.7) * 48;
+    const x = Math.cos(ang) * rad, y = Math.sin(ang) * rad, z = rand(0, 260);
+    const c = Math.random() < 0.15 ? [1.0, 0.86, 0.55] : Math.random() < 0.3 ? [0.80, 0.72, 1.0] : [0.72, 0.84, 1.0];
+    const seed = Math.random(), size = rand(0.10, 0.32);
+    P.set([x, y, z], i * 3); C.set(c, i * 3); D0.set([seed, size, 0], i * 3);
+    LP.set([x, y, z, x, y, z], i * 6); LC.set([...c, ...c], i * 6); LD.set([seed, size, 0, seed, size, 1], i * 6);
+  }
+  const gp = new THREE.BufferGeometry();
+  gp.setAttribute('position', new THREE.BufferAttribute(P, 3));
+  gp.setAttribute('aColor', new THREE.BufferAttribute(C, 3));
+  gp.setAttribute('aD', new THREE.BufferAttribute(D0, 3));
+  const gl = new THREE.BufferGeometry();
+  gl.setAttribute('position', new THREE.BufferAttribute(LP, 3));
+  gl.setAttribute('aColor', new THREE.BufferAttribute(LC, 3));
+  gl.setAttribute('aD', new THREE.BufferAttribute(LD, 3));
+  const pts = new THREE.Points(gp, makeMat(VS_TUNNEL, FS_GLOW, tunnelU));
+  const lines = new THREE.LineSegments(gl, makeMat(VS_TUNNEL, `varying vec3 vColor; varying float vAlpha; void main(){ gl_FragColor = vec4(vColor, vAlpha); }`, tunnelLineU));
+  pts.frustumCulled = false; lines.frustumCulled = false;
+  tunnel.add(lines, pts);
+  tunnel.renderOrder = 1; pts.renderOrder = 1; lines.renderOrder = 1;
+})();
+scene.add(tunnel);
+
+/* --- 2.5 Textura de resplandor (aura del girasol) --- */
+function glowTexture() {
+  const c = document.createElement('canvas'); c.width = c.height = 256;
+  const g = c.getContext('2d');
+  const grd = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+  grd.addColorStop(0, 'rgba(255,214,120,1)');
+  grd.addColorStop(0.25, 'rgba(255,190,80,.55)');
+  grd.addColorStop(0.6, 'rgba(255,160,50,.14)');
+  grd.addColorStop(1, 'rgba(255,150,40,0)');
+  g.fillStyle = grd; g.fillRect(0, 0, 256, 256);
+  const t = new THREE.CanvasTexture(c); return t;
+}
+const glowTex = glowTexture();
+const mkSprite = (scale, color) => {
+  const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, color, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false }));
+  s.scale.set(scale, scale, 1); s.renderOrder = 2; return s;
+};
+
+/* ============================================================
+   3. EL GIRASOL (≈28 000 partículas)
+   ============================================================ */
+const flowerU = Object.assign({}, shared, {
+  uPulseT: U.uPulseT, uDust: { value: new THREE.Vector3(1.0, 0.78, 0.38) },
+  uForm: { value: 0 }, uReveal: { value: 0 }, uOpen: { value: 0 }, uFade: { value: 1 },
+  uDim: { value: 1 }, uOut: { value: 0 }, uSpan: { value: 0.18 }, uBright: { value: 1 },
+});
+
+function buildFlower() {
+  const A = { start: [], target: [], color: [], p1: [], p2: [] };
+
+  /* Añade una partícula: destino (tx,ty,tz), color, tamaño, retraso, tipo, escape, alfa */
+  function add(tx, ty, tz, col, size, delay, type, esc, alpha) {
+    // Punto de partida: nube de polvo dorado concentrada en el centro
+    const rad = 0.4 + Math.abs(gauss()) * 3.0 + (Math.random() < 0.12 ? Math.random() * 6 : 0);
+    const th = Math.random() * Math.PI * 2, ph = Math.acos(2 * Math.random() - 1);
+    A.start.push(rad * Math.sin(ph) * Math.cos(th), rad * Math.sin(ph) * Math.sin(th), rad * Math.cos(ph) * 0.8);
+    A.target.push(tx, ty, tz);
+    A.color.push(col[0], col[1], col[2]);
+    A.p1.push(size, delay, Math.random(), type);
+    // revelado: las partículas más centrales aparecen primero
+    const reveal = Math.min(1, rad / 7.5) * 0.75 + Math.random() * 0.25;
+    A.p2.push(reveal, esc, 1.2 + Math.random() * 3.2, alpha);
+  }
+
+  /* ---- Centro (núcleo): espiral de Fibonacci con leve cúpula ---- */
+  const Rc = 1.95, nCore = Math.floor(6500 * Q);
+  const deep = [0.86, 0.42, 0.07], gold = [1.0, 0.72, 0.20], hi = [1.0, 0.85, 0.45];
+  for (let i = 0; i < nCore; i++) {
+    const f = (i + 0.5) / nCore, r = Rc * Math.sqrt(f), th = i * 2.399963 + rand(-0.02, 0.02);
+    const dome = 0.42 * Math.sqrt(Math.max(0, 1 - f));
+    let c = mix3(deep, gold, Math.pow(f, 1.4));
+    if (Math.random() < 0.25) c = mix3(c, hi, 0.5);
+    add(r * Math.cos(th) + rand(-0.02, 0.02), r * Math.sin(th) + rand(-0.02, 0.02), dome + rand(-0.04, 0.04),
+      c, rand(0.06, 0.11), f * 0.22 + rand(0, 0.05), 0, Math.random() < 0.01 ? rand(0.5, 1.5) : 0, 0.52);
+  }
+  /* ---- Anillo oscuro entre el centro y los pétalos ---- */
+  const nRing = Math.floor(1000 * Q);
+  for (let i = 0; i < nRing; i++) {
+    const r = rand(Rc * 0.97, Rc * 1.3), th = rand(0, Math.PI * 2);
+    add(r * Math.cos(th), r * Math.sin(th), rand(-0.05, 0.08), [0.78, 0.38, 0.07], rand(0.06, 0.10), 0.20 + rand(0, 0.08), 0, 0, 0.48);
+  }
+
+  /* ---- Pétalos: dos capas, cada pétalo es una superficie curva de partículas ---- */
+  const rootC = [0.98, 0.60, 0.08], midC = [1.0, 0.80, 0.14], tipC = [1.0, 0.90, 0.36];
+  function petals(n, per, R0, L, W, zBase, droop, angOff, delayBase, dark) {
+    for (let k = 0; k < n; k++) {
+      const ang = (k / n) * Math.PI * 2 + angOff + rand(-0.03, 0.03);
+      const len = L * rand(0.92, 1.08), wid = W * rand(0.9, 1.1), curl = droop * rand(0.7, 1.3), tilt = rand(-0.08, 0.08);
+      for (let s = 0; s < per; s++) {
+        // muestreo por rechazo → densidad uniforme sobre el área del pétalo
+        let u, env;
+        do { u = Math.random(); env = Math.pow(Math.sin(Math.PI * Math.pow(u, 0.75)), 0.85); } while (Math.random() > env);
+        const v = Math.random() * 2 - 1;
+        const lx = R0 + u * len;                  // a lo largo del pétalo
+        const ly = v * wid * env;                 // a lo ancho
+        const lz = zBase + tilt * u * len * 0.3 - curl * u * u * 0.95 + 0.16 * (1 - v * v) * env - 0.18 * Math.abs(v) * env;
+        const ca = Math.cos(ang), sa = Math.sin(ang);
+        let c = u < 0.5 ? mix3(rootC, midC, u / 0.5) : mix3(midC, tipC, (u - 0.5) / 0.5);
+        const vein = 0.85 + 0.25 * Math.pow(1 - Math.abs(v), 2);
+        c = [c[0] * vein * dark, c[1] * vein * dark, c[2] * vein * dark];
+        const size = rand(0.09, 0.18) * (Math.random() < 0.03 ? 2 : 1);
+        /* AJUSTE 3 — pétalos menos transparentes (antes 0.26 / 0.30) */
+        add(lx * ca - ly * sa + rand(-0.02, 0.02), lx * sa + ly * ca + rand(-0.02, 0.02), lz + rand(-0.02, 0.02),
+          c, size, delayBase + (k / n) * 0.20 + u * 0.20 + rand(0, 0.04), 1,
+          (u > 0.5 && Math.random() < 0.03) ? rand(0.8, 3.0) : 0, dark < 1 ? 0.38 : 0.46);
+      }
+    }
+  }
+  petals(26, Math.floor(420 * Q), 1.90, 3.50, 0.80, 0.00, 1.0, 0, 0.30, 1.0);
+  petals(22, Math.floor(380 * Q), 1.75, 3.15, 0.72, -0.28, 0.8, Math.PI / 22, 0.36, 0.86);
+
+  /* ---- Halo: polvo estelar alrededor que sale y regresa ---- */
+  const nHalo = Math.floor(1800 * Q);
+  for (let i = 0; i < nHalo; i++) {
+    const r = 2.6 + Math.abs(gauss()) * 2.2, th = rand(0, Math.PI * 2);
+    const c = Math.random() < 0.25 ? [0.78, 0.72, 1.0] : [1.0, 0.90, 0.60];
+    add(r * Math.cos(th), r * Math.sin(th), gauss() * 1.2, c, rand(0.04, 0.10), 0.5 + rand(0, 0.32), 2, rand(0.4, 1.6), 0.5);
+  }
+
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(A.start, 3));
+  g.setAttribute('aTarget', new THREE.Float32BufferAttribute(A.target, 3));
+  g.setAttribute('aColor', new THREE.Float32BufferAttribute(A.color, 3));
+  g.setAttribute('aP1', new THREE.Float32BufferAttribute(A.p1, 4));
+  g.setAttribute('aP2', new THREE.Float32BufferAttribute(A.p2, 4));
+  const pts = new THREE.Points(g, makeMat(VS_MORPH, FS_GLOW, flowerU));
+  pts.frustumCulled = false; pts.renderOrder = 3;
+  return pts;
+}
+
+const flowerGroup = new THREE.Group();
+flowerGroup.add(buildFlower());
+
+/* Aura y luz interior del girasol */
+const aura = mkSprite(22, 0xffc766);
+const innerLight = mkSprite(9, 0xff9a3a);
+aura.position.z = -0.6; innerLight.position.z = 0.2;
+flowerGroup.add(aura, innerLight);
+
+/* Destellos de 4 puntas alrededor */
+const sparkU = { uTime: U.uTime, uScale: U.uScale, uSizeMul: U.uSizeMul, uSparkle: U.uSparkle };
+const sparkles = (() => {
+  const n = Math.floor(70 * Q + 20);
+  const pos = new Float32Array(n * 3), d = new Float32Array(n * 4);
+  for (let i = 0; i < n; i++) {
+    const r = rand(2.6, 8.2), th = rand(0, Math.PI * 2);
+    pos.set([r * Math.cos(th), r * Math.sin(th), gauss() * 1.4], i * 3);
+    d.set([rand(0.5, 1.4), rand(0, 6.28), rand(0.5, 1.8), Math.random()], i * 4);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  g.setAttribute('aD', new THREE.BufferAttribute(d, 4));
+  const p = new THREE.Points(g, makeMat(VS_SPARK, FS_SPARK, sparkU));
+  p.frustumCulled = false; p.renderOrder = 5; return p;
+})();
+flowerGroup.add(sparkles);
+scene.add(flowerGroup);
+
+/* ============================================================
+   4. EL CORAZÓN DE PARTÍCULAS DORADAS
+   ============================================================ */
+const heartU = Object.assign({}, shared, {
+  uPulseT: U.uPulseT, uDust: { value: new THREE.Vector3(1.0, 0.82, 0.45) },
+  uForm: { value: 0 }, uReveal: { value: 1 }, uOpen: { value: 1 }, uFade: { value: 0 },
+  uDim: { value: 1 }, uOut: { value: 0 }, uSpan: { value: 0.42 }, uBright: { value: 1 },
+});
+const heartGroup = new THREE.Group();
+(() => {
+  const n = Math.floor(2600 * Q);
+  const S = { start: [], target: [], color: [], p1: [], p2: [] };
+  const s = 0.64;   // tamaño del corazón (rodea al girasol)
+  for (let i = 0; i < n; i++) {
+    const tt = Math.random() * Math.PI * 2;
+    const hx = 16 * Math.pow(Math.sin(tt), 3);
+    const hy = 13 * Math.cos(tt) - 5 * Math.cos(2 * tt) - 2 * Math.cos(3 * tt) - Math.cos(4 * tt);
+    const k = 1 + gauss() * 0.016;                      // grosor de la línea
+    S.target.push(hx * s * k, (hy + 2.5) * s * k, gauss() * 0.35);
+    // nacen dentro del girasol y viajan hasta dibujar el corazón
+    const rad = Math.sqrt(Math.random()) * 5.2, a = rand(0, Math.PI * 2);
+    S.start.push(rad * Math.cos(a), rad * Math.sin(a), gauss());
+    const c = Math.random() < 0.3 ? [1.0, 0.66, 0.42] : [1.0, 0.82, 0.38];
+    S.color.push(c[0], c[1], c[2]);
+    // se dibuja desde la punta inferior hacia arriba por ambos lados
+    S.p1.push(rand(0.09, 0.17), 0.5 * Math.abs(tt - Math.PI) / Math.PI + rand(0, 0.05), Math.random(), 3);
+    S.p2.push(0, Math.random() < 0.05 ? rand(0.4, 1.2) : 0, 1.5 + Math.random() * 2, 0.6);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(S.start, 3));
+  g.setAttribute('aTarget', new THREE.Float32BufferAttribute(S.target, 3));
+  g.setAttribute('aColor', new THREE.Float32BufferAttribute(S.color, 3));
+  g.setAttribute('aP1', new THREE.Float32BufferAttribute(S.p1, 4));
+  g.setAttribute('aP2', new THREE.Float32BufferAttribute(S.p2, 4));
+  const pts = new THREE.Points(g, makeMat(VS_MORPH, FS_GLOW, heartU));
+  pts.frustumCulled = false; pts.renderOrder = 4;
+  heartGroup.add(pts);
+})();
+scene.add(heartGroup);
+
+/* ============================================================
+   5. PARTÍCULAS DINÁMICAS: estela del cursor y ráfagas
+   ============================================================ */
+const POOL = 380;
+const pool = {
+  pos: new Float32Array(POOL * 3), col: new Float32Array(POOL * 3), d: new Float32Array(POOL * 2),
+  vel: new Float32Array(POOL * 3), life: new Float32Array(POOL), max: new Float32Array(POOL), size: new Float32Array(POOL), head: 0,
+};
+const poolGeo = new THREE.BufferGeometry();
+poolGeo.setAttribute('position', new THREE.BufferAttribute(pool.pos, 3).setUsage(THREE.DynamicDrawUsage));
+poolGeo.setAttribute('aColor', new THREE.BufferAttribute(pool.col, 3).setUsage(THREE.DynamicDrawUsage));
+poolGeo.setAttribute('aD', new THREE.BufferAttribute(pool.d, 2).setUsage(THREE.DynamicDrawUsage));
+const poolPts = new THREE.Points(poolGeo, makeMat(VS_POOL, FS_GLOW, { uScale: U.uScale }));
+poolPts.frustumCulled = false; poolPts.renderOrder = 6;
+scene.add(poolPts);
+
+function emit(x, y, z, vx, vy, vz, life, size, c) {
+  const i = pool.head; pool.head = (pool.head + 1) % POOL;
+  pool.pos.set([x, y, z], i * 3); pool.vel.set([vx, vy, vz], i * 3); pool.col.set(c, i * 3);
+  pool.life[i] = pool.max[i] = life; pool.size[i] = size;
+}
+function updatePool(dt) {
+  for (let i = 0; i < POOL; i++) {
+    if (pool.life[i] > 0) {
+      pool.life[i] -= dt;
+      const k = Math.max(pool.life[i], 0) / pool.max[i];
+      const drag = Math.pow(0.35, dt);
+      for (let a = 0; a < 3; a++) { pool.vel[i * 3 + a] *= drag; pool.pos[i * 3 + a] += pool.vel[i * 3 + a] * dt; }
+      pool.d[i * 2] = pool.size[i] * (0.4 + 0.6 * k);
+      pool.d[i * 2 + 1] = Math.pow(k, 1.4) * 0.9;
+    } else pool.d[i * 2 + 1] = 0;
+  }
+  poolGeo.attributes.position.needsUpdate = true;
+  poolGeo.attributes.aColor.needsUpdate = true;
+  poolGeo.attributes.aD.needsUpdate = true;
+}
+const trailColors = [[1.0, 0.82, 0.42], [1.0, 0.94, 0.78], [0.82, 0.76, 1.0]];
+
+/* ============================================================
+   6. ESTRELLAS FUGACES
+   ============================================================ */
+const shooters = [];
+for (let i = 0; i < 3; i++) {
+  const mat = new THREE.ShaderMaterial({
+    vertexShader: VS_SHOOT, fragmentShader: FS_SHOOT, uniforms: { uOp: { value: 0 } },
+    transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
+  });
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), mat);
+  mesh.visible = false; mesh.frustumCulled = false; mesh.renderOrder = 7;
+  scene.add(mesh);
+  shooters.push({ mesh, life: 0, max: 1, dir: new THREE.Vector3(), speed: 60 });
+}
+let nextShoot = 3;
+const _f = new THREE.Vector3(), _r = new THREE.Vector3(), _u = new THREE.Vector3(), _z = new THREE.Vector3(), _y = new THREE.Vector3();
+const _m = new THREE.Matrix4();
+function spawnShooter() {
+  const s = shooters.find((q) => q.life <= 0); if (!s) return;
+  camera.getWorldDirection(_f);
+  _r.crossVectors(_f, camera.up).normalize();
+  _u.crossVectors(_r, _f).normalize();
+  const sgn = Math.random() < 0.5 ? 1 : -1, a = -rand(0.25, 0.6);
+  s.dir.copy(_r).multiplyScalar(Math.cos(a) * sgn).addScaledVector(_u, Math.sin(a)).normalize();
+  const p = camera.position.clone().addScaledVector(_f, 70).addScaledVector(_r, rand(-32, 32)).addScaledVector(_u, rand(6, 26));
+  _z.copy(_f).negate(); _y.crossVectors(_z, s.dir).normalize();
+  _m.makeBasis(s.dir, _y, _z);
+  s.mesh.quaternion.setFromRotationMatrix(_m);
+  s.mesh.position.copy(p); s.mesh.scale.set(rand(11, 18), 0.26, 1);
+  s.life = s.max = rand(0.9, 1.5); s.speed = rand(45, 75); s.mesh.visible = true;
+}
+function updateShooters(dt) {
+  for (const s of shooters) {
+    if (s.life <= 0) continue;
+    s.life -= dt;
+    if (s.life <= 0) { s.mesh.visible = false; continue; }
+    s.mesh.position.addScaledVector(s.dir, s.speed * dt);
+    s.mesh.material.uniforms.uOp.value = Math.sin(Math.PI * (1 - s.life / s.max));
+  }
+}
+
+/* ============================================================
+   7. POST-PROCESO: BLOOM (brillo) + gradación de color + viñeta
+   ============================================================ */
+const quadScene = new THREE.Scene();
+const ortho = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+const VS_QUAD = `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`;
+const postMat = (fs, uniforms) => new THREE.ShaderMaterial({ vertexShader: VS_QUAD, fragmentShader: fs, uniforms, depthTest: false, depthWrite: false });
+
+const matBright = postMat(`
+varying vec2 vUv; uniform sampler2D tDiffuse; uniform float uThreshold;
+void main(){ vec3 c = texture2D(tDiffuse, vUv).rgb; float l = max(max(c.r, c.g), c.b);
+  float k = smoothstep(uThreshold, uThreshold + 0.35, l); gl_FragColor = vec4(c * k, 1.0); }`,
+  { tDiffuse: { value: null }, uThreshold: { value: 0.58 } });
+
+const matBlur = postMat(`
+varying vec2 vUv; uniform sampler2D tDiffuse; uniform vec2 uDir;
+void main(){
+  vec3 s = texture2D(tDiffuse, vUv).rgb * 0.2270270270;
+  s += texture2D(tDiffuse, vUv + uDir * 1.3846153846).rgb * 0.3162162162;
+  s += texture2D(tDiffuse, vUv - uDir * 1.3846153846).rgb * 0.3162162162;
+  s += texture2D(tDiffuse, vUv + uDir * 3.2307692308).rgb * 0.0702702703;
+  s += texture2D(tDiffuse, vUv - uDir * 3.2307692308).rgb * 0.0702702703;
+  gl_FragColor = vec4(s, 1.0); }`,
+  { tDiffuse: { value: null }, uDir: { value: new THREE.Vector2() } });
+
+const post = { uFlash: { value: 0 } };
+const matComp = postMat(`
+varying vec2 vUv;
+uniform sampler2D tScene, tB1, tB2;
+uniform float uBloom, uGold, uFlash, uTime; uniform vec2 uRes;
+void main(){
+  vec3 c = texture2D(tScene, vUv).rgb;
+  vec3 b = texture2D(tB1, vUv).rgb * 0.85 + texture2D(tB2, vUv).rgb * 1.1;
+  c += b * uBloom;
+  c *= mix(vec3(0.94, 0.98, 1.06), vec3(1.05, 1.0, 0.92), uGold);     // de frío a cálido
+  vec2 p = vUv - 0.5; c *= clamp(1.0 - dot(p, p) * 1.05, 0.0, 1.0);   // viñeta algo más cerrada
+  c += uFlash * vec3(1.0, 0.85, 0.55);
+  c = c / (1.0 + max(c - 0.8, 0.0) * 0.6);                             // suaviza los blancos quemados
+  float g = fract(sin(dot(vUv * uRes + uTime, vec2(12.9898, 78.233))) * 43758.5453);
+  c += (g - 0.5) * 0.014;
+  gl_FragColor = vec4(c, 1.0);
+}`,
+  { tScene: { value: null }, tB1: { value: null }, tB2: { value: null }, uBloom: { value: isMobile ? 0.85 : 1.0 },
+    uGold: U.uGold, uFlash: post.uFlash, uTime: U.uTime, uRes: { value: new THREE.Vector2(1, 1) } });
+
+const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), matComp);
+quad.frustumCulled = false;
+quadScene.add(quad);
+
+const mkRT = () => new THREE.WebGLRenderTarget(4, 4, {
+  minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, depthBuffer: false, stencilBuffer: false,
+});
+const rtScene = mkRT(), rt1a = mkRT(), rt1b = mkRT(), rt2a = mkRT(), rt2b = mkRT();
+
+function pass(mat, target) { quad.material = mat; renderer.setRenderTarget(target); renderer.render(quadScene, ortho); }
+function blur(src, tmp, dst) {
+  matBlur.uniforms.tDiffuse.value = src.texture; matBlur.uniforms.uDir.value.set(1 / src.width, 0); pass(matBlur, tmp);
+  matBlur.uniforms.tDiffuse.value = tmp.texture; matBlur.uniforms.uDir.value.set(0, 1 / tmp.height); pass(matBlur, dst);
+}
+function renderPost() {
+  renderer.setRenderTarget(rtScene); renderer.clear(); renderer.render(scene, camera);
+  matBright.uniforms.tDiffuse.value = rtScene.texture; pass(matBright, rt1a);
+  blur(rt1a, rt1b, rt1a);
+  matBlur.uniforms.tDiffuse.value = rt1a.texture; matBlur.uniforms.uDir.value.set(1 / rt1a.width, 0); pass(matBlur, rt2b);  // 1/8 res
+  matBlur.uniforms.tDiffuse.value = rt2b.texture; matBlur.uniforms.uDir.value.set(0, 1 / rt2b.height); pass(matBlur, rt2a);
+  blur(rt2a, rt2b, rt2a);
+  matComp.uniforms.tScene.value = rtScene.texture; matComp.uniforms.tB1.value = rt1a.texture; matComp.uniforms.tB2.value = rt2a.texture;
+  pass(matComp, null);
+}
+
+/* ============================================================
+   8. CÁMARA CINEMATOGRÁFICA + REDIMENSIONADO
+   ============================================================ */
+const START_R = 32;
+let baseDist = 17;
+const cam = { fov: 55, roll: 0, arrive: 0, orbit: 0, pull: 1 };
+const user = { theta: 0, phi: 0, zoom: 1, tTheta: 0, tPhi: 0, tZoom: 1 };
+const par = { x: 0, y: 0 };
+const mouse = { x: 0, y: 0, active: false };
+
+function computeBase() {
+  const tanH = Math.tan(THREE.MathUtils.degToRad(55 / 2));
+  /* AJUSTE 5 — el girasol llena más la pantalla */
+  const fitH = 7.2 / tanH;                       // el girasol ocupa buena parte de la altura
+  const fitW = 7.4 / (tanH * camera.aspect);     // y cabe en pantallas verticales
+  baseDist = Math.max(fitH, fitW, 13.5);
+}
+function resize() {
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h; camera.updateProjectionMatrix();
+  const bs = renderer.getDrawingBufferSize(new THREE.Vector2());
+  rtScene.setSize(bs.x, bs.y);
+  rt1a.setSize(Math.max(2, bs.x >> 2), Math.max(2, bs.y >> 2)); rt1b.setSize(rt1a.width, rt1a.height);
+  rt2a.setSize(Math.max(2, bs.x >> 3), Math.max(2, bs.y >> 3)); rt2b.setSize(rt2a.width, rt2a.height);
+  matComp.uniforms.uRes.value.set(bs.x, bs.y);
+  U.uPR.value = renderer.getPixelRatio();
+  computeBase();
+}
+addEventListener('resize', resize);
+resize();
+
+const _ndc = new THREE.Vector2();
+const raycaster = new THREE.Raycaster();
+function updateCamera(dt, time) {
+  // suavizado de los controles del usuario
+  const k = 1 - Math.exp(-dt * 7);
+  user.theta += (user.tTheta - user.theta) * k;
+  user.phi += (user.tPhi - user.phi) * k;
+  user.zoom += (user.tZoom - user.zoom) * k;
+  par.x += (mouse.x - par.x) * Math.min(1, dt * 2.5);
+  par.y += (mouse.y - par.y) * Math.min(1, dt * 2.5);
+
+  const r = lerp(START_R, baseDist, cam.arrive) * cam.pull * user.zoom;
+  /* AJUSTE 1 — órbita mucho más corta: el girasol se ve casi siempre de frente */
+  const th = cam.orbit * Math.sin(time * 0.10) * 0.42 + user.theta;
+  const ph = clamp(Math.PI / 2 - 0.06 + cam.orbit * Math.sin(time * 0.075 + 1.0) * 0.13 + user.phi, 0.35, Math.PI - 0.35);
+  camera.position.set(r * Math.sin(ph) * Math.sin(th), r * Math.cos(ph), r * Math.sin(ph) * Math.cos(th));
+  // respiración de cámara + paralaje con el puntero
+  camera.position.x += par.x * 1.4 + Math.sin(time * 0.37) * 0.14;
+  camera.position.y += par.y * 0.9 + Math.cos(time * 0.29) * 0.10;
+  if (Math.abs(camera.fov - cam.fov) > 0.001) { camera.fov = cam.fov; camera.updateProjectionMatrix(); }
+  camera.lookAt(0, 0, 0);
+  camera.rotateZ(cam.roll);
+  camera.updateMatrixWorld();
+
+  U.uScale.value = renderer.domElement.height / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2));
+
+  // rayo del puntero (para que las partículas se aparten)
+  _ndc.set(mouse.x, mouse.y);
+  raycaster.setFromCamera(_ndc, camera);
+  U.uRayO.value.copy(raycaster.ray.origin);
+  U.uRayD.value.copy(raycaster.ray.direction);
+}
+
+/* ============================================================
+   9. AUDIO — sintetizado con WebAudio (empieza tras un clic)
+   La pista electro del final se genera aquí mismo, nota por nota.
+   Solo se usa si tu archivo de música no está disponible.
+   ============================================================ */
+const Sound = (() => {
+  let ctx = null, master = null, bus = null, drone = null, pad = null, noiseG = null, noiseF = null, muted = false, ready = false;
+  let revNode = null;
+  // --- música electro sintetizada (respaldo) ---
+  let musicGain = null, musicSend = null, musicDelay = null, hatBuf = null, musicTimer = null;
+  let stepIdx = 0, nextStepTime = 0, musicOn = false;
+  const BPM = 112, STEP = 60 / BPM / 4;   // duración de una semicorchea
+
+  function makeIR(sec, decay) {
+    const rate = ctx.sampleRate, len = (rate * sec) | 0, buf = ctx.createBuffer(2, len, rate);
+    for (let c = 0; c < 2; c++) { const d = buf.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay); }
+    return buf;
+  }
+  function init() {
+    if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return; }
+    const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+    try { ctx = new AC(); } catch (e) { ctx = null; return; }
+    master = ctx.createGain(); master.gain.value = muted ? 0 : 0.85; master.connect(ctx.destination);
+    bus = ctx.createGain(); bus.connect(master);
+    const rev = ctx.createConvolver(); rev.buffer = makeIR(3.2, 2.6); revNode = rev;
+    const revG = ctx.createGain(); revG.gain.value = 0.45; bus.connect(revG); revG.connect(rev); rev.connect(master);
+
+    // Ambiente espacial: drone grave con filtro que respira
+    const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 420; lp.Q.value = 0.7;
+    drone = ctx.createGain(); drone.gain.value = 0; lp.connect(drone); drone.connect(bus);
+    [[55, 'sine', 0], [82.41, 'sine', -4], [110, 'triangle', 5], [164.81, 'sine', 3]].forEach(([f, t, det]) => {
+      const o = ctx.createOscillator(); o.type = t; o.frequency.value = f; o.detune.value = det;
+      const g = ctx.createGain(); g.gain.value = f < 100 ? 0.5 : 0.22; o.connect(g); g.connect(lp); o.start();
+    });
+    const lfo = ctx.createOscillator(); lfo.frequency.value = 0.05;
+    const lg = ctx.createGain(); lg.gain.value = 180; lfo.connect(lg); lg.connect(lp.frequency); lfo.start();
+
+    // Pad dorado (entra cuando se forma el girasol)
+    pad = ctx.createGain(); pad.gain.value = 0; pad.connect(bus);
+    [[220, 0], [329.63, -6], [440, 4], [554.37, -3], [659.25, 6]].forEach(([f, det], i) => {
+      const o = ctx.createOscillator(); o.type = 'sine'; o.frequency.value = f; o.detune.value = det;
+      const g = ctx.createGain(); g.gain.value = 0.16 / (1 + i * 0.4);
+      const tr = ctx.createOscillator(); tr.frequency.value = 0.08 + i * 0.03;
+      const tg = ctx.createGain(); tg.gain.value = 0.05; tr.connect(tg); tg.connect(g.gain); tr.start();
+      o.connect(g); g.connect(pad); o.start();
+    });
+
+    // Estela del viaje: ruido marrón filtrado
+    const nb = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate), nd = nb.getChannelData(0); let last = 0;
+    for (let i = 0; i < nd.length; i++) { const w = Math.random() * 2 - 1; last = (last + 0.02 * w) / 1.02; nd[i] = last * 3.5; }
+    const ns = ctx.createBufferSource(); ns.buffer = nb; ns.loop = true;
+    noiseF = ctx.createBiquadFilter(); noiseF.type = 'bandpass'; noiseF.frequency.value = 300; noiseF.Q.value = 0.8;
+    noiseG = ctx.createGain(); noiseG.gain.value = 0;
+    ns.connect(noiseF); noiseF.connect(noiseG); noiseG.connect(bus); ns.start();
+
+    // --- cadena de la música electro de respaldo ---
+    musicGain = ctx.createGain(); musicGain.gain.value = 0; musicGain.connect(master);
+    musicSend = ctx.createGain(); musicSend.gain.value = 0.16; musicGain.connect(musicSend); musicSend.connect(revNode);
+    musicDelay = ctx.createDelay(1.0); musicDelay.delayTime.value = STEP * 3;
+    const fb = ctx.createGain(); fb.gain.value = 0.32;
+    const dWet = ctx.createGain(); dWet.gain.value = 0.5;
+    musicDelay.connect(fb); fb.connect(musicDelay); musicDelay.connect(dWet); dWet.connect(musicGain);
+    hatBuf = ctx.createBuffer(1, (ctx.sampleRate * 0.3) | 0, ctx.sampleRate);
+    const hd = hatBuf.getChannelData(0);
+    for (let i = 0; i < hd.length; i++) hd[i] = Math.random() * 2 - 1;
+
+    ready = true;
+  }
+  const now = () => ctx.currentTime;
+  function note(freq, when, dur, gain, type, attack, harm) {
+    if (!ready) return;
+    const t = now() + (when || 0);
+    const o = ctx.createOscillator(); o.type = type || 'sine'; o.frequency.value = freq;
+    const g = ctx.createGain(); g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(gain, t + (attack || 0.01)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(bus); o.start(t); o.stop(t + dur + 0.05);
+    if (harm !== false) {
+      const o2 = ctx.createOscillator(); o2.type = 'sine'; o2.frequency.value = freq * 2.005;
+      const g2 = ctx.createGain(); g2.gain.setValueAtTime(0.0001, t);
+      g2.gain.linearRampToValueAtTime(gain * 0.3, t + (attack || 0.01)); g2.gain.exponentialRampToValueAtTime(0.0001, t + dur * 0.6);
+      o2.connect(g2); g2.connect(bus); o2.start(t); o2.stop(t + dur);
+    }
+  }
+  function thump(when, gain) {
+    if (!ready) return;
+    const t = now() + when;
+    const o = ctx.createOscillator(); o.type = 'sine'; o.frequency.setValueAtTime(95, t); o.frequency.exponentialRampToValueAtTime(42, t + 0.2);
+    const g = ctx.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(gain, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.34);
+    o.connect(g); g.connect(bus); o.start(t); o.stop(t + 0.4);
+  }
+
+  /* ---------- instrumentos de la pista electro ---------- */
+  function kick(t) {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.frequency.setValueAtTime(145, t); o.frequency.exponentialRampToValueAtTime(44, t + 0.09);
+    g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(0.85, t + 0.005);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.32);
+    o.connect(g); g.connect(musicGain); o.start(t); o.stop(t + 0.34);
+  }
+  function hat(t, open) {
+    const src = ctx.createBufferSource(); src.buffer = hatBuf;
+    const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 7600;
+    const g = ctx.createGain(); const dur = open ? 0.17 : 0.045;
+    g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(open ? 0.11 : 0.085, t + 0.002);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    src.connect(hp); hp.connect(g); g.connect(musicGain);
+    src.start(t); src.stop(t + dur + 0.02);
+  }
+  function bassNote(t, f, dur) {
+    const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = f;
+    const o2 = ctx.createOscillator(); o2.type = 'square'; o2.frequency.value = f * 0.5; o2.detune.value = 6;
+    const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.Q.value = 7;
+    lp.frequency.setValueAtTime(190, t); lp.frequency.linearRampToValueAtTime(1000, t + 0.05);
+    lp.frequency.exponentialRampToValueAtTime(220, t + dur);
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(0.20, t + 0.012);
+    g.gain.setTargetAtTime(0.0001, t + dur * 0.65, 0.05);
+    o.connect(lp); o2.connect(lp); lp.connect(g); g.connect(musicGain);
+    o.start(t); o.stop(t + dur + 0.12); o2.start(t); o2.stop(t + dur + 0.12);
+  }
+  function pluck(t, f) {
+    const o = ctx.createOscillator(); o.type = 'triangle'; o.frequency.value = f;
+    const o2 = ctx.createOscillator(); o2.type = 'sawtooth'; o2.frequency.value = f; o2.detune.value = 9;
+    const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 3200; lp.Q.value = 1;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(0.085, t + 0.006);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.45);
+    const g2 = ctx.createGain(); g2.gain.value = 0.35;
+    o.connect(lp); o2.connect(lp); lp.connect(g); g.connect(musicGain); g.connect(g2); g2.connect(musicDelay);
+    o.start(t); o.stop(t + 0.5); o2.start(t); o2.stop(t + 0.5);
+  }
+  function chordStab(t, notes) {
+    notes.forEach((f, i) => {
+      const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = f; o.detune.value = (i - 1) * 7;
+      const lp = ctx.createBiquadFilter(); lp.type = 'lowpass';
+      lp.frequency.setValueAtTime(2600, t); lp.frequency.exponentialRampToValueAtTime(700, t + 1.1);
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(0.045, t + 0.25);
+      g.gain.setTargetAtTime(0.0001, t + 0.9, 0.35);
+      o.connect(lp); lp.connect(g); g.connect(musicGain);
+      o.start(t); o.stop(t + 2.2);
+    });
+  }
+
+  /* Progresión en La mayor: A · F#m · D · E */
+  const BASS = [110.00, 92.50, 73.42, 82.41];
+  const ARP = [
+    [440.00, 554.37, 659.25, 880.00],
+    [369.99, 440.00, 554.37, 739.99],
+    [293.66, 369.99, 440.00, 587.33],
+    [329.63, 415.30, 493.88, 659.25],
+  ];
+  const CHORD = [
+    [220.00, 277.18, 329.63],
+    [184.99, 220.00, 277.18],
+    [146.83, 184.99, 220.00],
+    [164.81, 207.65, 246.94],
+  ];
+
+  function playStep(s, t) {
+    const bar = (s >> 4) & 3, i = s & 15;
+    if (i % 4 === 0) kick(t);                                  // bombo a negras
+    if (i % 2 === 1) hat(t, i === 15);                         // charles a contratiempo
+    if (i === 0 || i === 3 || i === 6 || i === 8 || i === 11 || i === 14) {
+      const f = (i === 6 || i === 14) ? BASS[bar] * 1.5 : BASS[bar];
+      bassNote(t, f, STEP * 1.6);
+    }
+    if (i % 2 === 0) pluck(t, ARP[bar][(i >> 1) % 4] * (i >= 8 ? 2 : 1));
+    if (i === 0) chordStab(t, CHORD[bar]);
+  }
+  function scheduler() {
+    if (!ready || !musicOn) return;
+    if (ctx.state !== 'running') { nextStepTime = ctx.currentTime + 0.1; return; }
+    while (nextStepTime < ctx.currentTime + 0.22) {
+      playStep(stepIdx, nextStepTime);
+      nextStepTime += STEP;
+      stepIdx = (stepIdx + 1) & 63;
+    }
+  }
+
+  return {
+    init,
+    startAmbient() { if (!ready) return; drone.gain.cancelScheduledValues(now()); drone.gain.setTargetAtTime(0.17, now(), 1.6); },
+    stopAmbient() { if (!ready) return; drone.gain.setTargetAtTime(0, now(), 0.5); pad.gain.setTargetAtTime(0, now(), 0.5); noiseG.gain.setTargetAtTime(0, now(), 0.3); },
+    duckAmbient() { if (ready) drone.gain.setTargetAtTime(0.09, now(), 2); },
+    setWarp(l) { if (!ready) return; noiseG.gain.setTargetAtTime(0.02 + l * 0.32, now(), 0.15); noiseF.frequency.setTargetAtTime(250 + l * 2600, now(), 0.2); },
+    padTo(level, secs) { if (ready) pad.gain.setTargetAtTime(level, now(), secs / 3); },
+    flowerChime() {
+      [440, 554.37, 659.25, 880, 1108.7, 1318.5, 1760].forEach((f, i) => note(f, i * 0.16, 3.4, 0.09));
+      note(110, 0, 6, 0.12, 'sine', 1.5, false);
+    },
+    heartSound() {
+      [0, 0.34, 1.1, 1.44, 2.2, 2.54].forEach((t, i) => thump(t, i % 2 ? 0.34 : 0.5));
+      [329.63, 415.3, 493.88, 659.25, 830.6, 987.77].forEach((f, i) => note(f, 0.45 + i * 0.22, 2.6, 0.085, 'triangle', 0.01));
+      note(164.81, 0.3, 6, 0.09, 'sine', 1.4, false);
+    },
+    tick() { note(1500 + Math.random() * 500, 0, 0.05, 0.014, 'sine', 0.002, false); },
+    sparkle() { const n = [880, 1108.7, 1318.5, 1760, 2217]; for (let i = 0; i < 3; i++) note(n[(Math.random() * n.length) | 0], i * 0.07, 1.5, 0.05); },
+    finalChord() {
+      [220, 277.18, 329.63, 440, 554.37, 659.25].forEach((f, i) => note(f, i * 0.05, 7, 0.06, 'sine', 1.6));
+      [880, 1108.7, 1318.5, 1760].forEach((f, i) => note(f, 0.8 + i * 0.25, 3, 0.05));
+    },
+    /* --- pista electro de respaldo --- */
+    startMusic(fade) {
+      if (!ready || musicOn) return;
+      musicOn = true; stepIdx = 0; nextStepTime = now() + 0.15;
+      musicGain.gain.cancelScheduledValues(now());
+      musicGain.gain.setValueAtTime(0.0001, now());
+      musicGain.gain.setTargetAtTime(0.16, now(), (fade || 5) / 3);
+      drone.gain.setTargetAtTime(0.09, now(), 2);
+      if (musicTimer) clearInterval(musicTimer);
+      musicTimer = setInterval(scheduler, 25);
+    },
+    stopMusic() {
+      if (!ready || !musicOn) return;
+      musicGain.gain.cancelScheduledValues(now());
+      musicGain.gain.setTargetAtTime(0.0001, now(), 0.25);
+      setTimeout(() => { musicOn = false; if (musicTimer) { clearInterval(musicTimer); musicTimer = null; } }, 900);
+    },
+    toggle() { muted = !muted; if (ready) master.gain.setTargetAtTime(muted ? 0 : 0.85, now(), 0.08); return muted; },
+    suspend() { if (ctx && ctx.state === 'running') ctx.suspend(); },
+    resume() { if (ctx && ctx.state === 'suspended') ctx.resume(); },
+  };
+})();
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { Sound.suspend(); if (bgmOK) bgm.pause(); }
+  else { Sound.resume(); if (bgmOK && bgm.dataset.playing === '1') bgm.play().catch(() => {}); }
+});
+
+/* ---------- Control de la música de fondo (archivo) ---------- */
+function unlockMusic() {
+  // Se llama con el primer clic: así el navegador permite reproducir después.
+  if (!bgm) return;
+  bgm.volume = 0;
+  bgm.play().then(() => { bgm.pause(); bgm.currentTime = 0; bgmOK = true; }).catch(() => { bgmOK = false; });
+}
+function startBackgroundMusic() {
+  if (!bgm) return;
+
+  bgm.volume = MUSIC_VOLUME;
+
+  const p = bgm.play();
+
+  if (p && p.catch) {
+    p.then(() => {
+      bgmOK = true;
+      bgm.dataset.playing = '1';
+      console.log('🎵 musica.mp3 reproduciéndose');
+      Sound.duckAmbient();
+    }).catch((err) => {
+      bgmOK = false;
+      console.warn('🔇 No se pudo reproducir musica.mp3:', err);
+    });
+  } else {
+    bgmOK = true;
+    bgm.dataset.playing = '1';
+    Sound.duckAmbient();
+  }
+}
+function stopBackgroundMusic() {
+  Sound.stopMusic();
+  if (!bgm) return;
+  bgm.dataset.playing = '0';
+  gsap.killTweensOf(bgm);
+  gsap.to(bgm, { volume: 0, duration: 0.9, onComplete: () => { bgm.pause(); bgm.currentTime = 0; } });
+}
+
+/* ============================================================
+   10. INTERACCIÓN (mouse + touch): órbita, zoom, clic en el girasol
+   ============================================================ */
+let interactive = false, flowerReady = false, started = false, resetting = false;
+const pointers = new Map();
+let pinchD = 0, moved = 0, downT = 0;
+const lastTrail = { x: 0, y: 0, ok: false };
+const sphere = new THREE.Sphere(new THREE.Vector3(), 6.4);
+const _hit = new THREE.Vector3(), _tp = new THREE.Vector3();
+
+function setMouse(e) { mouse.x = (e.clientX / innerWidth) * 2 - 1; mouse.y = -((e.clientY / innerHeight) * 2 - 1); }
+
+/* Estela de partículas que sigue al cursor */
+function trail(x, y) {
+  if (!lastTrail.ok) { lastTrail.x = x; lastTrail.y = y; lastTrail.ok = true; }
+  const dx = x - lastTrail.x, dy = y - lastTrail.y, d = Math.hypot(dx, dy);
+  const n = Math.min(6, 1 + Math.floor(d / 10));
+  const dT = camera.position.length() * 0.55;
+  for (let k = 0; k < n; k++) {
+    const f = (k + 1) / n;
+    _tp.set(((lastTrail.x + dx * f) / innerWidth) * 2 - 1, -(((lastTrail.y + dy * f) / innerHeight) * 2 - 1), 0.5).unproject(camera);
+    _tp.sub(camera.position).normalize().multiplyScalar(dT).add(camera.position);
+    const px = (3.5 + Math.random() * 6) * renderer.getPixelRatio();
+    emit(_tp.x + rand(-0.15, 0.15), _tp.y + rand(-0.15, 0.15), _tp.z + rand(-0.15, 0.15),
+      rand(-0.5, 0.5), rand(-0.4, 0.7), rand(-0.5, 0.5), rand(0.8, 1.6), (px / U.uScale.value) * dT,
+      trailColors[(Math.random() * 3) | 0]);
+  }
+  lastTrail.x = x; lastTrail.y = y;
+}
+
+function hitFlower(cx, cy) {
+  _ndc.set((cx / innerWidth) * 2 - 1, -((cy / innerHeight) * 2 - 1));
+  raycaster.setFromCamera(_ndc, camera);
+  sphere.center.copy(flowerGroup.position);
+  return raycaster.ray.intersectSphere(sphere, _hit) !== null;
+}
+
+/* Clic sobre el girasol: onda de luz + ráfaga de partículas + destello sonoro */
+function pulse() {
+  gsap.killTweensOf(U.uPulseT);
+  U.uPulseT.value = 0;
+  gsap.to(U.uPulseT, { value: 4, duration: 4, ease: 'none', onComplete: () => { U.uPulseT.value = 99; } });
+  gsap.fromTo(flowerU.uBright, { value: 1.7 }, { value: 1, duration: 1.6, ease: 'power2.out', overwrite: 'auto' });
+  for (let i = 0; i < 70; i++) {
+    const a = rand(0, Math.PI * 2), b = Math.acos(rand(-1, 1)), sp = rand(2, 6), r0 = rand(0, 3);
+    const dir = [Math.sin(b) * Math.cos(a), Math.sin(b) * Math.sin(a), Math.cos(b)];
+    emit(dir[0] * r0, dir[1] * r0, dir[2] * r0, dir[0] * sp, dir[1] * sp, dir[2] * sp, rand(1.0, 2.2), rand(0.10, 0.28), trailColors[(Math.random() * 2) | 0]);
+  }
+  Sound.sparkle();
+}
+
+const isUI = (t) => t.closest && t.closest('.card, button');
+addEventListener('pointerdown', (e) => {
+  if (isUI(e.target)) return;
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  setMouse(e);
+  if (e.pointerType !== 'mouse') mouse.active = true;
+  if (pointers.size === 1) { moved = 0; downT = performance.now(); canvas.style.cursor = 'grabbing'; }
+  if (pointers.size === 2) { const [a, b] = [...pointers.values()]; pinchD = Math.hypot(a.x - b.x, a.y - b.y); }
+});
+addEventListener('pointermove', (e) => {
+  setMouse(e); mouse.active = true;
+  if (e.pointerType === 'mouse' || pointers.has(e.pointerId)) trail(e.clientX, e.clientY);
+  if (!pointers.has(e.pointerId)) {
+    if (flowerReady && e.pointerType === 'mouse') canvas.classList.toggle('pointer', hitFlower(e.clientX, e.clientY));
+    return;
+  }
+  const prev = pointers.get(e.pointerId);
+  const dx = e.clientX - prev.x, dy = e.clientY - prev.y;
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (!interactive) return;
+  if (pointers.size === 2) {                                     // pellizco = zoom
+    const [a, b] = [...pointers.values()]; const nd = Math.hypot(a.x - b.x, a.y - b.y);
+    if (pinchD > 0) user.tZoom = clamp(user.tZoom * (pinchD / nd), 0.55, 1.7);
+    pinchD = nd; moved += 20;
+  } else {                                                       // arrastre = órbita
+    user.tTheta -= dx * 0.006; user.tPhi = clamp(user.tPhi - dy * 0.005, -0.9, 0.9); moved += Math.abs(dx) + Math.abs(dy);
+  }
+});
+function endPointer(e) {
+  if (!pointers.has(e.pointerId)) return;
+  const wasSingle = pointers.size === 1;
+  pointers.delete(e.pointerId);
+  if (pointers.size === 0) canvas.style.cursor = '';
+  if (e.pointerType !== 'mouse' && pointers.size === 0) { mouse.active = false; lastTrail.ok = false; }
+  if (e.type === 'pointerup' && wasSingle && moved < 10 && performance.now() - downT < 450 && flowerReady && hitFlower(e.clientX, e.clientY)) pulse();
+}
+addEventListener('pointerup', endPointer);
+addEventListener('pointercancel', endPointer);
+document.addEventListener('mouseleave', () => { mouse.active = false; lastTrail.ok = false; });
+addEventListener('wheel', (e) => {
+  if (!interactive) return;
+  user.tZoom = clamp(user.tZoom * Math.exp(e.deltaY * 0.0012), 0.55, 1.7);
+  e.preventDefault();
+}, { passive: false });
+
+/* ============================================================
+   11. LA TARJETA (escena 1)
+   ============================================================ */
+const card = $('#card'), enterEl = $('#enter');
+card.addEventListener('pointermove', (e) => {
+  if (e.pointerType !== 'mouse') return;
+  const r = card.getBoundingClientRect();
+  const x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+  card.style.setProperty('--ry', (x * 9).toFixed(2) + 'deg');
+  card.style.setProperty('--rx', (-y * 7).toFixed(2) + 'deg');
+  card.style.setProperty('--ty', '-6px');
+});
+card.addEventListener('pointerleave', () => { card.style.setProperty('--rx', '0deg'); card.style.setProperty('--ry', '0deg'); card.style.setProperty('--ty', '0px'); });
+card.addEventListener('click', () => play());
+card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); play(); } });
+$('#start').addEventListener('click', (e) => { e.stopPropagation(); play(); });
+
+const soundBtn = $('#sound');
+soundBtn.addEventListener('click', () => {
+  const m = Sound.toggle();
+  if (bgm) bgm.muted = m;
+  soundBtn.classList.toggle('off', m); soundBtn.setAttribute('aria-pressed', String(m));
+  soundBtn.setAttribute('aria-label', m ? 'Activar sonido' : 'Silenciar sonido');
+});
+
+/* ============================================================
+   12. MENSAJE ESCRITO LETRA POR LETRA
+   ============================================================ */
+const MSG = 'Para ti, porque incluso en medio de todo el universo,\nhay flores que siempre encuentran su camino hacia ti. 🌻';
+const chars = Array.from(MSG);
+const prox = { n: 0 };
+let lastN = -1;
+const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+function renderTyped() {
+  const n = Math.floor(prox.n); if (n === lastN) return; lastN = n;
+  // el texto restante queda invisible para que el párrafo no se mueva mientras se escribe
+  $('#msg-text').innerHTML = esc(chars.slice(0, n).join('')) + '<span class="caret"></span><span class="ghost">' + esc(chars.slice(n).join('')) + '</span>';
+  if (n % 2 === 0 && n > 0 && n < chars.length) Sound.tick();
+}
+
+/* ============================================================
+   13. LA LÍNEA DE TIEMPO (guion de la experiencia)
+   ============================================================ */
+let tl = null;
+const hintEl = $('#hint');
+hintEl.textContent = isMobile
+  ? 'Desliza para girar, pellizca para acercar y toca el girasol.'
+  : 'Arrastra para girar, usa la rueda para acercar y haz clic en el girasol.';
+
+function play() {
+  if (started || resetting) return;
+  started = true;
+  Sound.init(); Sound.startAmbient(); soundBtn.classList.add('show');
+  unlockMusic();   // desbloquea el audio aprovechando este clic
+
+  const T = gsap.timeline(); tl = T;
+
+  /* ESCENA 2 — el viaje ---------------------------------------- */
+  T.to('#card-wrap', { opacity: 0, scale: 1.1, duration: 0.9, ease: 'power2.in' }, 0)
+   .set('#card-wrap', { display: 'none' }, 0.95)
+   .to(U.uSpeed, { value: 1, duration: 3.2, ease: 'power2.in' }, 0.25)
+   .to(U.uStreak, { value: WARP.streak, duration: 3.0, ease: 'power2.in' }, 0.25)
+   .to(cam, { fov: WARP.fov, duration: 3.4, ease: 'power2.in' }, 0.25)
+   .to(cam, { roll: WARP.roll, duration: 3.2, ease: 'sine.inOut' }, 0.5)
+   .to(U.uNeb, { value: 1.05, duration: 3.0, ease: 'power1.in' }, 0.25)
+   .to(post.uFlash, { value: 0.30, duration: 0.35, ease: 'power2.out' }, 3.2)
+   .to(post.uFlash, { value: 0, duration: 1.8, ease: 'power2.inOut' }, 3.55)
+
+  /* ESCENA 3 — el espacio: la velocidad baja lentamente ----------- */
+   .to(U.uSpeed, { value: 0.012, duration: 5.2, ease: 'power3.out' }, 4.6)
+   .to(U.uStreak, { value: 0, duration: 3.8, ease: 'power2.out' }, 4.6)
+   .to(cam, { fov: 55, duration: 5.2, ease: 'power2.out' }, 4.6)
+   .to(cam, { roll: 0, duration: 5, ease: 'sine.inOut' }, 4.6)
+   .to(U.uNeb, { value: 0.62, duration: 6, ease: 'sine.inOut' }, 5.5)   // fondo más oscuro = flor más nítida
+   .to(cam, { arrive: 1, duration: 8, ease: 'sine.inOut' }, 6.5)          // la cámara llega frente al vacío
+   .to(flowerU.uReveal, { value: 0.22, duration: 3.5, ease: 'sine.out' }, 6.8)   // pocas partículas doradas
+   .call(() => { interactive = true; }, null, 9)
+   .to(U.uGold, { value: 1, duration: 22, ease: 'sine.inOut' }, 8)        // de oscuro a dorado
+   .call(() => Sound.padTo(0.05, 8), null, 11)
+
+  /* ESCENA 4 — las partículas se reúnen: núcleo → pétalos → girasol */
+   .to(flowerU.uReveal, { value: 1, duration: 4, ease: 'sine.inOut' }, 10.8)
+   .to(flowerU.uForm, { value: 1, duration: 17, ease: 'power1.inOut' }, 10)
+   .to(flowerU.uOpen, { value: 1, duration: 8.5, ease: 'power2.inOut' }, 18.5)  // el capullo se abre
+   .to(cam, { orbit: 1, duration: 8, ease: 'sine.inOut' }, 15)            // comienza la órbita
+   .call(() => Sound.flowerChime(), null, 25.5)
+   .to(U.uSparkle, { value: 1, duration: 3, ease: 'sine.inOut' }, 26)
+   .to(flowerU.uBright, { value: 1.5, duration: 1.2, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 26.2)
+   .call(() => { flowerReady = true; }, null, 27.5)
+   .to(hintEl, { opacity: 1, duration: 1.5 }, 29)
+   .to(hintEl, { opacity: 0, duration: 1.5 }, 36)
+
+  /* EFECTO SORPRESA — pausa, y luego el corazón rodea al girasol ---- */
+   .to(heartU.uFade, { value: 1, duration: 1.4, ease: 'sine.out' }, 31)
+   .to(heartU.uForm, { value: 1, duration: 6, ease: 'power1.inOut' }, 31)
+   .to(cam, { pull: 1.35, duration: 6, ease: 'sine.inOut' }, 31)
+   .call(() => Sound.heartSound(), null, 31.2)
+   .call(() => { beat.on = true; }, null, 34)
+   .to(heartU.uFade, { value: 0, duration: 3.2, ease: 'sine.in' }, 39.5)   // desaparece suavemente
+   .to(heartU.uOut, { value: 1, duration: 3.2, ease: 'sine.in' }, 39.5)
+   .call(() => { beat.on = false; }, null, 42.5)
+
+  /* MENSAJE — aparece letra por letra --------------------------- */
+   .to('#veil-center', { opacity: 1, duration: 2, ease: 'sine.inOut' }, 41.5)
+   .to(flowerU.uDim, { value: 0.5, duration: 2, ease: 'sine.inOut' }, 41.5)
+   .to(cam, { pull: 1.0, duration: 4, ease: 'sine.inOut' }, 42)
+   .to('#message', { opacity: 1, duration: 0.8 }, 42.5)
+   .call(() => { $('#sr').textContent = MSG.replace('\n', ' '); }, null, 42.6)
+   .to(prox, { n: chars.length, duration: chars.length * 0.062, ease: 'none', onUpdate: renderTyped }, 43)
+   .to('#message', { opacity: 0, duration: 1.4, ease: 'sine.in' }, 52.2)
+   .to('#veil-center', { opacity: 0, duration: 2, ease: 'sine.inOut' }, 52.2)
+   .to(flowerU.uDim, { value: 1, duration: 2.5, ease: 'sine.inOut' }, 52.2)
+
+  /* ESCENA FINAL ------------------------------------------------ */
+   .to('#veil-bottom', { opacity: 1, duration: 2, ease: 'sine.inOut' }, 53)
+   .call(() => Sound.finalChord(), null, 53.2)
+   .call(() => startBackgroundMusic(), null, MUSIC_START)   // ← aquí entra la música de fondo
+   .to('#final-text', { opacity: 1, y: 0, duration: 2.4, ease: 'power2.out' }, 53.2)
+   .to(flowerU.uBright, { value: 1.45, duration: 1.4, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 53.2)
+   .to('#restart', { opacity: 1, y: 0, duration: 1.4, ease: 'power2.out' }, 55.6)
+   .set('#restart', { pointerEvents: 'auto' }, 55.6);
+}
+
+/* Latido del corazón (escala) mientras permanece visible */
+const beat = { on: false };
+
+/* Reiniciar toda la experiencia desde el principio */
+function restart() {
+  if (resetting || !started) return;
+  resetting = true;
+  $('#curtain').style.opacity = 1;
+  stopBackgroundMusic();
+  Sound.stopAmbient();
+  setTimeout(() => {
+    if (tl) tl.kill();
+    tl = null;
+    gsap.killTweensOf([U.uPulseT, flowerU.uBright]);
+    // estado 3D
+    Object.assign(cam, { fov: 55, roll: 0, arrive: 0, orbit: 0, pull: 1 });
+    Object.assign(user, { theta: 0, phi: 0, zoom: 1, tTheta: 0, tPhi: 0, tZoom: 1 });
+    U.uSpeed.value = 0; U.uStreak.value = 0; U.uGold.value = 0; U.uNeb.value = 0.55; U.uSparkle.value = 0; U.uPulseT.value = 99;
+    flowerU.uForm.value = 0; flowerU.uReveal.value = 0; flowerU.uOpen.value = 0; flowerU.uFade.value = 1;
+    flowerU.uDim.value = 1; flowerU.uOut.value = 0; flowerU.uBright.value = 1;
+    heartU.uForm.value = 0; heartU.uFade.value = 0; heartU.uOut.value = 0;
+    heartGroup.scale.setScalar(1);
+    post.uFlash.value = 0;
+    for (let i = 0; i < POOL; i++) pool.life[i] = 0;
+    // estado de la interfaz
+    prox.n = 0; lastN = -1; $('#msg-text').innerHTML = ''; $('#sr').textContent = '';
+    gsap.set('#message', { opacity: 0 });
+    gsap.set('#final-text', { opacity: 0, y: 16 });
+    gsap.set('#restart', { opacity: 0, y: 12, pointerEvents: 'none' });
+    gsap.set(['#veil-center', '#veil-bottom', hintEl], { opacity: 0 });
+    gsap.set('#card-wrap', { display: 'grid', opacity: 1, scale: 1 });
+    enterEl.classList.remove('in'); void enterEl.offsetWidth; enterEl.classList.add('in');
+    interactive = false; flowerReady = false; started = false; beat.on = false;
+    canvas.classList.remove('pointer');
+    $('#curtain').style.opacity = 0;
+    resetting = false;
+  }, 950);
+}
+$('#restart').addEventListener('click', restart);
+gsap.set('#final-text', { opacity: 0, y: 16 });
+gsap.set('#restart', { opacity: 0, y: 12 });
+
+/* ============================================================
+   14. BUCLE PRINCIPAL
+   ============================================================ */
+const clock = new THREE.Clock();
+let time = 0, travel = 0;
+function frame() {
+  requestAnimationFrame(frame);
+  const dt = Math.min(clock.getDelta(), 0.05);
+  time += dt; U.uTime.value = time;
+
+  // viaje: acumula distancia según la velocidad actual
+  travel += dt * U.uSpeed.value * 220;
+  U.uTravel.value = travel;
+  U.uFlow.value = travel * 0.0006 + time * 0.01;
+  Sound.setWarp(U.uSpeed.value);
+
+  U.uRepel.value += ((mouse.active ? 1 : 0) - U.uRepel.value) * Math.min(1, dt * 6);
+
+  updateCamera(dt, time);
+
+  // el fondo viaja con la cámara (se ve "infinito")
+  nebula.position.copy(camera.position);
+  stars.position.copy(camera.position);
+  tunnel.position.copy(camera.position);
+
+  // girasol: flota y gira lentamente
+  const formed = sstep(0.55, 1.0, flowerU.uForm.value);
+  flowerGroup.rotation.z += dt * 0.035 * formed;
+  flowerGroup.position.y = Math.sin(time * 0.6) * 0.15;
+
+  // luz alrededor de los pétalos
+  const form = flowerU.uForm.value, dim = flowerU.uDim.value;
+  aura.material.opacity = (0.06 + 0.22 * sstep(0.2, 1.0, form)) * (0.9 + 0.1 * Math.sin(time * 1.2)) * dim * (0.4 + 0.6 * sstep(0.0, 0.2, form));
+  innerLight.material.opacity = 0.30 * sstep(0.05, 0.5, form) * dim;
+
+  // el corazón mira siempre a la cámara y late
+  heartGroup.quaternion.copy(camera.quaternion);
+  if (beat.on) {
+    const ph = (time * 1.1) % 1;
+    const b = Math.exp(-ph * 10) + (ph > 0.28 ? 0.7 * Math.exp(-(ph - 0.28) * 10) : 0);
+    heartGroup.scale.setScalar(1 + 0.035 * b);
+  }
+
+  // estrellas fugaces ocasionales
+  if (time > nextShoot) { spawnShooter(); nextShoot = time + rand(4, 9); }
+  updateShooters(dt);
+  updatePool(dt);
+
+  renderPost();
+}
+frame();
+
+})();
+</script>
+</body>
+</html>
